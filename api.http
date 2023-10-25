@@ -1,8 +1,10 @@
 GET http://localhost:3000/bank-accounts
 
+@id = 27a3389a-20a0-4361-9b07-dc094ce8aafa
+
 ###
 
-GET http://localhost:3000/bank-accounts/27a3389a-20a0-4361-9b07-dc094ce8aafa
+GET http://localhost:3000/bank-accounts/{{id}}
 
 ###
 
@@ -16,11 +18,11 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/bank-accounts/27a3389a-20a0-4361-9b07-dc094ce8aafa/pix-keys
+GET http://localhost:3000/bank-accounts/{{id}}/pix-keys
 
 ###
 
-POST http://localhost:3000/bank-accounts/27a3389a-20a0-4361-9b07-dc094ce8aafa/pix-keys
+POST http://localhost:3000/bank-accounts/{{id}}/pix-keys
 Content-Type: application/json
 
 {
