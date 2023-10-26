@@ -1,31 +1,41 @@
 GET http://localhost:3000/bank-accounts
 
-@id = 27a3389a-20a0-4361-9b07-dc094ce8aafa
+@bankAccountId = 0895476f-2e14-4883-8d43-27e332e407e4
 
 ###
-
-GET http://localhost:3000/bank-accounts/{{id}}
+GET http://localhost:3000/bank-accounts/{{bankAccountId}}
 
 ###
-
 POST http://localhost:3000/bank-accounts
 Content-Type: application/json
 
 {
-  "account_number": "1111-1",
-  "owner_name": "John Doe"
+    "account_number": "1111-1",
+    "owner_name": "John Doe"
 }
 
 ###
-
-GET http://localhost:3000/bank-accounts/{{id}}/pix-keys
+GET http://localhost:3000/bank-accounts/{{bankAccountId}}/pix-keys
 
 ###
-
-POST http://localhost:3000/bank-accounts/{{id}}/pix-keys
+POST http://localhost:3000/bank-accounts/{{bankAccountId}}/pix-keys
 Content-Type: application/json
 
 {
-  "kind": "email",
-  "key": "user@email.com"
+    "kind": "email",
+    "key": "user1@email.com"
+}
+
+###
+GET http://localhost:3000/bank-accounts/{{bankAccountId}}/transactions
+
+### Create a new transaction
+POST http://localhost:3000/bank-accounts/{{bankAccountId}}/transactions
+Content-Type: application/json
+
+{
+    "pix_key_key": "user1@email.com",
+    "pix_key_kind": "email",
+    "description": "My transaction",
+    "amount": 10.00
 }
