@@ -16,7 +16,6 @@ import { ConfirmTransactionDto } from './dto/confirm-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
-  //Service Layer
   constructor(
     @InjectRepository(Transaction)
     private transactionRepo: Repository<Transaction>,
@@ -148,16 +147,4 @@ export class TransactionsService {
 
     return transaction;
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} transaction`;
-  // }
-
-  // update(id: number, updateTransactionDto: UpdateTransactionDto) {
-  //   return `This action updates a #${id} transaction`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} transaction`;
-  // }
 }

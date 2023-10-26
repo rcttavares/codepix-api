@@ -91,20 +91,7 @@ export class PixKeysService implements OnModuleInit {
       order: { created_at: 'DESC' },
     });
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} pixKey`;
-  // }
-
-  // update(id: number, updatePixKeyDto: UpdatePixKeyDto) {
-  //   return `This action updates a #${id} pixKey`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} pixKey`;
-  // }
 }
 
 export class PixKeyGrpcUnknownError extends Error {}
-
 export class PixKeyAlreadyExistsError extends Error {}

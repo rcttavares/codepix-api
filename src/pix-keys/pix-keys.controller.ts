@@ -18,19 +18,4 @@ export class PixKeysController {
   findAll(@Param('bankAccountId') bankAccountId: string) {
     return this.pixKeysService.findAll(bankAccountId);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.pixKeysService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePixKeyDto: UpdatePixKeyDto) {
-  //   return this.pixKeysService.update(+id, updatePixKeyDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.pixKeysService.remove(+id);
-  // }
 }
