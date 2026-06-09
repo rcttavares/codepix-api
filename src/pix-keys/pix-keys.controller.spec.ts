@@ -8,7 +8,12 @@ describe('PixKeysController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PixKeysController],
-      providers: [PixKeysService],
+      providers: [
+        {
+          provide: PixKeysService,
+          useValue: {},
+        },
+      ],
     }).compile();
 
     controller = module.get<PixKeysController>(PixKeysController);
