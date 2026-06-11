@@ -1,73 +1,165 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# CodePix API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+REST API for a simulated banking system with Pix key management and inter-bank transfers. Built with [NestJS](https://nestjs.com), TypeScript, PostgreSQL, Kafka, and gRPC.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+The project simulates two banks (`bank-001` and `bank-002`) that communicate via Kafka to process Pix transactions. Integration with the Pix key service is handled via gRPC.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
+
+- **NestJS 11** — main framework
+- **TypeORM + PostgreSQL** — persistence
+- **Kafka** — inter-bank messaging (via `@nestjs/microservices`)
+- **gRPC** — communication with the Pix key service
+- **Docker / Docker Compose** — development environment
+
+## Prerequisites
+
+- Docker and Docker Compose installed
+- Kafka and the CodePix gRPC service running externally (at `host.docker.internal`)
+
+## Configuration
+
+Each bank uses a separate `.env` file. The `.bank-001.env` and `.bank-002.env` files are already in the repository with bank-specific variables.
+
+Base environment variables (`.env`):
+
+```env
+TYPEORM_CONNECTION=postgres
+TYPEORM_HOST=db
+TYPEORM_USERNAME=postgres
+TYPEORM_PASSWORD=root
+TYPEORM_PORT=5432
+
+GRPC_URL=host.docker.internal:50051
+KAFKA_BROKER=host.docker.internal:9094
+```
+
+Per-bank variables (`.bank-00x.env`):
+
+```env
+BANK_CODE=001
+TYPEORM_DATABASE=nest_bank_001
+PORT=3000
+KAFKA_CONSUMER_GROUP_ID=nest_bank_001
+```
 
 ## Installation
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Running the app
+## Running with Docker
+
+```bash
+# Start the database and application
+docker compose up -d
+
+# Access the container
+docker compose exec app bash
+
+# Load fixtures (seed data) for bank 001
+BANK_CODE=001 npm run console fixtures
+
+# Start in development mode
+BANK_CODE=001 npm run start:dev
+```
+
+## Running locally
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
-# production mode
-$ npm run start:prod
+# production
+npm run start:prod
 ```
 
-## Test
+## Endpoints
+
+The API exposes the following REST routes (default port: `3000`):
+
+### Bank Accounts
+
+| Method  | Route                 | Description            |
+| ------- | --------------------- | ---------------------- |
+| `GET`   | `/bank-accounts`      | List all accounts      |
+| `GET`   | `/bank-accounts/:id`  | Get account by ID      |
+| `POST`  | `/bank-accounts`      | Create a new account   |
+
+```json
+// POST /bank-accounts
+{
+  "account_number": "1111-1",
+  "owner_name": "John Doe"
+}
+```
+
+### Pix Keys
+
+| Method  | Route                                      | Description          |
+| ------- | ------------------------------------------ | -------------------- |
+| `GET`   | `/bank-accounts/:bankAccountId/pix-keys`   | List account keys    |
+| `POST`  | `/bank-accounts/:bankAccountId/pix-keys`   | Register a new key   |
+
+Supported key types: `cpf`, `email`
+
+```json
+// POST /bank-accounts/:bankAccountId/pix-keys
+{
+  "kind": "email",
+  "key": "user@email.com"
+}
+```
+
+### Transactions
+
+| Method  | Route                                            | Description               |
+| ------- | ------------------------------------------------ | ------------------------- |
+| `GET`   | `/bank-accounts/:bankAccountId/transactions`     | List account transactions |
+| `POST`  | `/bank-accounts/:bankAccountId/transactions`     | Create a new transaction  |
+
+```json
+// POST /bank-accounts/:bankAccountId/transactions
+{
+  "pix_key_key": "user@email.com",
+  "pix_key_kind": "email",
+  "description": "Payment",
+  "amount": 10.00
+}
+```
+
+## Messaging (Kafka)
+
+The service consumes messages from the `bank001` and `bank002` topics. Each instance only processes messages for its own bank (checked via `BANK_CODE`).
+
+Two message types are supported:
+
+- `status: "pending"` — creates a transaction received from another bank
+- `status: "confirmed"` — confirms an existing transaction
+
+## Tests
 
 ```bash
 # unit tests
-$ npm run test
+npm run test
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
-# test coverage
-$ npm run test:cov
+# coverage
+npm run test:cov
 ```
 
-## Support
+## HTTP Files
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The `.http` files in the project root can be used with the VS Code REST Client extension:
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- `api.http` — general API examples
+- `bank-001.http` — requests for bank 001
+- `bank-002.http` — requests for bank 002
