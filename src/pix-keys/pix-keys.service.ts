@@ -54,8 +54,7 @@ export class PixKeysService implements OnModuleInit {
   }): Promise<RegisterPixKeyRpcResponse | null> {
     try {
       return await lastValueFrom(this.pixGrpcService.find(data));
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
       if (e.details == 'no key was found') {
         return null;
       }

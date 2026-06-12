@@ -51,19 +51,29 @@ KAFKA_CONSUMER_GROUP_ID=nest_bank_001
 npm install
 ```
 
-## Running with Docker
+## Getting Started
+
+**1. Start the database and application:**
 
 ```bash
-# Start the database and application
 docker compose up -d
+```
 
-# Access the container
+**2. Enter the app container:**
+
+```bash
 docker compose exec app bash
+```
 
-# Load fixtures (seed data) for bank 001
+**3. Seed the database with fixture data:**
+
+```bash
 BANK_CODE=001 npm run console fixtures
+```
 
-# Start in development mode
+**4. Start the application in development mode:**
+
+```bash
 BANK_CODE=001 npm run start:dev
 ```
 
