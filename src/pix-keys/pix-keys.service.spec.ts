@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { PixKeysService } from './pix-keys.service';
 import { PixKey } from './entities/pix-key.entity';
 import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
@@ -21,6 +22,10 @@ describe('PixKeysService', () => {
         },
         {
           provide: 'PIX_PACKAGE',
+          useValue: {},
+        },
+        {
+          provide: ConfigService,
           useValue: {},
         },
       ],

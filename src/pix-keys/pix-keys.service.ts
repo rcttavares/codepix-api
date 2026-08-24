@@ -7,6 +7,8 @@ import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
 import { ClientGrpc } from '@nestjs/microservices';
 import { PixKeyClientGrpc, RegisterPixKeyRpcResponse } from './pix-keys.grpc';
 import { lastValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
+import { Metadata } from '@grpc/grpc-js';
 
 @Injectable()
 export class PixKeysService implements OnModuleInit {
@@ -18,10 +20,17 @@ export class PixKeysService implements OnModuleInit {
     private bankAccountRepo: Repository<BankAccount>,
     @Inject('PIX_PACKAGE')
     private pixGrpcPackage: ClientGrpc,
+    private configService: ConfigService,
   ) {}
 
   onModuleInit() {
     this.pixGrpcService = this.pixGrpcPackage.getService('PixService');
+  }
+
+  private grpcMetadata(): Metadata {
+    const metadata = new Metadata();
+    metadata.add('authorization', this.configService.get('GRPC_AUTH_TOKEN'));
+    return metadata;
   }
 
   async create(bankAccountId: string, createPixKeyDto: CreatePixKeyDto) {
@@ -34,10 +43,13 @@ export class PixKeysService implements OnModuleInit {
       return this.createIfNotExists(bankAccountId, remotePixKey);
     } else {
       const createdRemotePixKey = await lastValueFrom(
-        this.pixGrpcService.registerPixKey({
-          ...createPixKeyDto,
-          accountId: bankAccountId,
-        }),
+        this.pixGrpcService.registerPixKey(
+          {
+            ...createPixKeyDto,
+            accountId: bankAccountId,
+          },
+          this.grpcMetadata(),
+        ),
       );
 
       return this.pixKeyRepo.save({
@@ -53,7 +65,9 @@ export class PixKeysService implements OnModuleInit {
     kind: string;
   }): Promise<RegisterPixKeyRpcResponse | null> {
     try {
-      return await lastValueFrom(this.pixGrpcService.find(data));
+      return await lastValueFrom(
+        this.pixGrpcService.find(data, this.grpcMetadata()),
+      );
     } catch (e: any) {
       if (e.details == 'no key was found') {
         return null;

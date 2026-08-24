@@ -1,3 +1,4 @@
+import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs'; //reactive x
 
 interface Account {
@@ -18,13 +19,19 @@ export interface RegisterPixKeyRpcResponse {
 }
 
 export interface PixKeyClientGrpc {
-  registerPixKey: (data: {
-    kind: string;
-    key: string;
-    accountId: string;
-  }) => Observable<{ id: string; status: string; error: string }>;
-  find: (data: {
-    kind: string;
-    key: string;
-  }) => Observable<RegisterPixKeyRpcResponse>;
+  registerPixKey: (
+    data: {
+      kind: string;
+      key: string;
+      accountId: string;
+    },
+    metadata?: Metadata,
+  ) => Observable<{ id: string; status: string; error: string }>;
+  find: (
+    data: {
+      kind: string;
+      key: string;
+    },
+    metadata?: Metadata,
+  ) => Observable<RegisterPixKeyRpcResponse>;
 }
