@@ -13,18 +13,12 @@ export class FixturesCommand {
     description: 'Seed data in database',
   })
   async command() {
-    await this.clearTables();
     const bankFixtures = fixtures[process.env.BANK_CODE] as any[];
     for (const fixture of bankFixtures) {
       await this.createInDatabase(fixture.model, fixture.fields);
     }
 
     console.log(chalk.green('Data generated'));
-  }
-
-  async clearTables() {
-    await this.dataSource.dropDatabase();
-    await this.dataSource.synchronize();
   }
 
   async createInDatabase(model: any, data: any) {
