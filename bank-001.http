@@ -28,6 +28,12 @@ Content-Type: application/json
   "key": "1"
 }
 
+### Delete a pix key from bank account 1 (fill in the id from the POST response above)
+@pixKeyId1 = 00000000-0000-0000-0000-000000000000
+
+###
+DELETE http://localhost:3000/bank-accounts/{{bankAccountId1}}/pix-keys/{{pixKeyId1}}
+
 ###
 @bankAccountId2 = 51a720b2-5144-4d7f-921d-57023b1e24c1
 
