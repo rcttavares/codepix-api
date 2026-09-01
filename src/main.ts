@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { PixKeyAlreadyExistsErrorFilter } from './pix-keys/filters/pix-key-already-exists.error';
 import { PixKeyGrpcUnknownErrorFilter } from './pix-keys/filters/pix-key-grpc-unknown-error.filter';
+import { PixKeyNotFoundErrorFilter } from './pix-keys/filters/pix-key-not-found.error';
 import { Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -12,6 +13,7 @@ async function bootstrap() {
   app.useGlobalFilters(
     new PixKeyGrpcUnknownErrorFilter(),
     new PixKeyAlreadyExistsErrorFilter(),
+    new PixKeyNotFoundErrorFilter(),
   );
 
   app.useGlobalPipes(

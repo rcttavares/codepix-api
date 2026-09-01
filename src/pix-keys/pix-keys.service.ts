@@ -104,7 +104,26 @@ export class PixKeysService implements OnModuleInit {
       order: { created_at: 'DESC' },
     });
   }
+
+  async remove(bankAccountId: string, id: string) {
+    const pixKey = await this.pixKeyRepo.findOne({
+      where: { id, bank_account_id: bankAccountId },
+    });
+    if (!pixKey) {
+      throw new PixKeyNotFoundError('Pix Key not found');
+    }
+
+    const result = await lastValueFrom(
+      this.pixGrpcService.deactivatePixKey({ id }, this.grpcMetadata()),
+    );
+    if (result.status !== 'deactivated') {
+      throw new PixKeyGrpcUnknownError(result.error || 'Grpc Internal Error');
+    }
+
+    await this.pixKeyRepo.delete({ id });
+  }
 }
 
 export class PixKeyGrpcUnknownError extends Error {}
 export class PixKeyAlreadyExistsError extends Error {}
+export class PixKeyNotFoundError extends Error {}

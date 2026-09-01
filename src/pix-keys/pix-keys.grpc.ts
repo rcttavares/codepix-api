@@ -34,4 +34,10 @@ export interface PixKeyClientGrpc {
     },
     metadata?: Metadata,
   ) => Observable<RegisterPixKeyRpcResponse>;
+  deactivatePixKey: (
+    data: {
+      id: string;
+    },
+    metadata?: Metadata,
+  ) => Observable<{ id: string; status: string; error: string }>;
 }

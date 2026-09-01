@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Param,
+  HttpCode,
+} from '@nestjs/common';
 import { PixKeysService } from './pix-keys.service';
 import { CreatePixKeyDto } from './dto/create-pix-key.dto';
 
@@ -17,5 +25,14 @@ export class PixKeysController {
   @Get()
   findAll(@Param('bankAccountId') bankAccountId: string) {
     return this.pixKeysService.findAll(bankAccountId);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  remove(
+    @Param('bankAccountId') bankAccountId: string,
+    @Param('id') id: string,
+  ) {
+    return this.pixKeysService.remove(bankAccountId, id);
   }
 }

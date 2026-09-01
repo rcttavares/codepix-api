@@ -112,10 +112,11 @@ The API exposes the following REST routes (default port: `3000`):
 
 ### Pix Keys
 
-| Method  | Route                                      | Description          |
-| ------- | ------------------------------------------ | -------------------- |
-| `GET`   | `/bank-accounts/:bankAccountId/pix-keys`   | List account keys    |
-| `POST`  | `/bank-accounts/:bankAccountId/pix-keys`   | Register a new key   |
+| Method   | Route                                        | Description        |
+| -------- | -------------------------------------------- | ------------------ |
+| `GET`    | `/bank-accounts/:bankAccountId/pix-keys`     | List account keys  |
+| `POST`   | `/bank-accounts/:bankAccountId/pix-keys`     | Register a new key |
+| `DELETE` | `/bank-accounts/:bankAccountId/pix-keys/:id` | Deactivate a key   |
 
 Supported key types: `cpf`, `email`
 
