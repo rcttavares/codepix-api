@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -12,16 +13,16 @@ import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
 
 describe('PixKeysService', () => {
   let service: PixKeysService;
-  let pixKeyRepo: { findOne: jest.Mock; delete: jest.Mock };
-  let pixGrpcService: { deactivatePixKey: jest.Mock };
+  let pixKeyRepo: { findOne: Mock; delete: Mock };
+  let pixGrpcService: { deactivatePixKey: Mock };
 
   beforeEach(async () => {
     pixKeyRepo = {
-      findOne: jest.fn(),
-      delete: jest.fn(),
+      findOne: vi.fn(),
+      delete: vi.fn(),
     };
     pixGrpcService = {
-      deactivatePixKey: jest.fn(),
+      deactivatePixKey: vi.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -43,7 +44,7 @@ describe('PixKeysService', () => {
         },
         {
           provide: ConfigService,
-          useValue: { get: jest.fn() },
+          useValue: { get: vi.fn() },
         },
       ],
     }).compile();
