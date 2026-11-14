@@ -1,26 +1,25 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { ClientKafka } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { lastValueFrom } from 'rxjs';
 import { DataSource, Repository } from 'typeorm';
+import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
+import { PixKey } from '../pix-keys/entities/pix-key.entity';
+import { ConfirmTransactionDto } from './dto/confirm-transaction.dto';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { CreateTransactionFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
 import {
   Transaction,
   TransactionOperation,
   TransactionStatus,
 } from './entities/transaction.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
-import { ClientKafka } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
-import { CreateTransactionFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
-import { PixKey } from '../pix-keys/entities/pix-key.entity';
-import { ConfirmTransactionDto } from './dto/confirm-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectRepository(Transaction)
     private transactionRepo: Repository<Transaction>,
-    @InjectRepository(BankAccount)
-    private bankAccountRepo: Repository<BankAccount>,
+    @InjectRepository(BankAccount) _bankAccountRepo: Repository<BankAccount>,
     private dataSource: DataSource,
     @Inject('KAFKA_SERVICE')
     private kafkaService: ClientKafka,

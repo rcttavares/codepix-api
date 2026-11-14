@@ -1,13 +1,12 @@
-import { ClientsModule, Transport } from '@nestjs/microservices';
-
-import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
-import { ConfigService } from '@nestjs/config';
+import { join } from 'node:path';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
 import { PixKey } from './entities/pix-key.entity';
 import { PixKeysController } from './pix-keys.controller';
 import { PixKeysService } from './pix-keys.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
 
 @Module({
   imports: [

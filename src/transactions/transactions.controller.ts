@@ -1,16 +1,16 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
   Param,
+  Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { TransactionsService } from './transactions.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { CreateTransactionFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
 import { ConfirmTransactionDto } from './dto/confirm-transaction.dto';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { CreateTransactionFromAnotherBankAccountDto } from './dto/create-transaction-from-another-bank-account.dto';
+import { TransactionsService } from './transactions.service';
 
 @Controller('bank-accounts/:bankAccountId/transactions')
 export class TransactionsController {

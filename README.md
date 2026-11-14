@@ -96,11 +96,11 @@ The API exposes the following REST routes (default port: `3000`):
 
 ### Bank Accounts
 
-| Method  | Route                 | Description            |
-| ------- | --------------------- | ---------------------- |
-| `GET`   | `/bank-accounts`      | List all accounts      |
-| `GET`   | `/bank-accounts/:id`  | Get account by ID      |
-| `POST`  | `/bank-accounts`      | Create a new account   |
+| Method | Route                | Description          |
+| ------ | -------------------- | -------------------- |
+| `GET`  | `/bank-accounts`     | List all accounts    |
+| `GET`  | `/bank-accounts/:id` | Get account by ID    |
+| `POST` | `/bank-accounts`     | Create a new account |
 
 ```json
 // POST /bank-accounts
@@ -130,10 +130,10 @@ Supported key types: `cpf`, `email`
 
 ### Transactions
 
-| Method  | Route                                            | Description               |
-| ------- | ------------------------------------------------ | ------------------------- |
-| `GET`   | `/bank-accounts/:bankAccountId/transactions`     | List account transactions |
-| `POST`  | `/bank-accounts/:bankAccountId/transactions`     | Create a new transaction  |
+| Method | Route                                        | Description               |
+| ------ | -------------------------------------------- | ------------------------- |
+| `GET`  | `/bank-accounts/:bankAccountId/transactions` | List account transactions |
+| `POST` | `/bank-accounts/:bankAccountId/transactions` | Create a new transaction  |
 
 ```json
 // POST /bank-accounts/:bankAccountId/transactions

@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/home/node/app
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "host.docker.internal:host-gateway"
 
   db:
     image: postgres:13-alpine

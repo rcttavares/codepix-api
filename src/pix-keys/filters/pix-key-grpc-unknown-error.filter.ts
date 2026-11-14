@@ -1,7 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-
-import { PixKeyGrpcUnknownError } from '../../pix-keys/pix-keys.service';
 import { Response } from 'express';
+import { PixKeyGrpcUnknownError } from '../../pix-keys/pix-keys.service';
 
 @Catch(PixKeyGrpcUnknownError)
 export class PixKeyGrpcUnknownErrorFilter implements ExceptionFilter {

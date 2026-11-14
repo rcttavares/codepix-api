@@ -1,7 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-
-import { PixKeyAlreadyExistsError } from '../../pix-keys/pix-keys.service';
 import { Response } from 'express';
+import { PixKeyAlreadyExistsError } from '../../pix-keys/pix-keys.service';
 
 @Catch(PixKeyAlreadyExistsError)
 export class PixKeyAlreadyExistsErrorFilter implements ExceptionFilter {

@@ -1,7 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-
-import { PixKeyNotFoundError } from '../../pix-keys/pix-keys.service';
 import { Response } from 'express';
+import { PixKeyNotFoundError } from '../../pix-keys/pix-keys.service';
 
 @Catch(PixKeyNotFoundError)
 export class PixKeyNotFoundErrorFilter implements ExceptionFilter {

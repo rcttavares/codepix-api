@@ -1,14 +1,14 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { CreatePixKeyDto } from './dto/create-pix-key.dto';
-import { Repository } from 'typeorm';
-import { PixKey, PixKeyKind } from './entities/pix-key.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
-import { ClientGrpc } from '@nestjs/microservices';
-import { PixKeyClientGrpc, RegisterPixKeyRpcResponse } from './pix-keys.grpc';
-import { lastValueFrom } from 'rxjs';
-import { ConfigService } from '@nestjs/config';
 import { Metadata } from '@grpc/grpc-js';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ClientGrpc } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { lastValueFrom } from 'rxjs';
+import { Repository } from 'typeorm';
+import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
+import { CreatePixKeyDto } from './dto/create-pix-key.dto';
+import { PixKey, PixKeyKind } from './entities/pix-key.entity';
+import { PixKeyClientGrpc, RegisterPixKeyRpcResponse } from './pix-keys.grpc';
 
 @Injectable()
 export class PixKeysService implements OnModuleInit {
@@ -69,7 +69,7 @@ export class PixKeysService implements OnModuleInit {
         this.pixGrpcService.find(data, this.grpcMetadata()),
       );
     } catch (e: any) {
-      if (e.details == 'no key was found') {
+      if (e.details === 'no key was found') {
         return null;
       }
 
@@ -81,7 +81,7 @@ export class PixKeysService implements OnModuleInit {
     bankAccountId: string,
     remotePixKey: RegisterPixKeyRpcResponse,
   ) {
-    const hasLocalPixKey = await this.pixKeyRepo.exist({
+    const hasLocalPixKey = await this.pixKeyRepo.exists({
       where: {
         key: remotePixKey.key,
       },

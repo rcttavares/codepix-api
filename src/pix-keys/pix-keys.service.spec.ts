@@ -1,15 +1,15 @@
-import type { Mock } from 'vitest';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
+import type { Mock } from 'vitest';
+import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
+import { PixKey } from './entities/pix-key.entity';
 import {
-  PixKeysService,
   PixKeyGrpcUnknownError,
   PixKeyNotFoundError,
+  PixKeysService,
 } from './pix-keys.service';
-import { PixKey } from './entities/pix-key.entity';
-import { BankAccount } from '../bank-accounts/entities/bank-account.entity';
 
 describe('PixKeysService', () => {
   let service: PixKeysService;

@@ -1,14 +1,14 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Delete,
   Body,
-  Param,
+  Controller,
+  Delete,
+  Get,
   HttpCode,
+  Param,
+  Post,
 } from '@nestjs/common';
-import { PixKeysService } from './pix-keys.service';
 import { CreatePixKeyDto } from './dto/create-pix-key.dto';
+import { PixKeysService } from './pix-keys.service';
 
 @Controller('bank-accounts/:bankAccountId/pix-keys')
 export class PixKeysController {
